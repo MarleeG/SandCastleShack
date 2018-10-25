@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FormGroup, Button, Checkbox, Table, ControlLabel, FormControl } from 'react-bootstrap';
+import { FormGroup, Button, Checkbox, ControlLabel, FormControl } from 'react-bootstrap';
 
 import './menuSelection.css'
 
@@ -13,8 +13,13 @@ class MenuSelection extends Component {
         this.menuOptions = this.menuOptions.bind(this);
         this.menuItemsSelected = this.menuItemsSelected.bind(this)
         this.kidsOrdering = this.kidsOrdering.bind(this);
+        this.teensOrdering = this.teensOrdering.bind(this);
+        this.defaultSetting = this.defaultSetting.bind(this);
 
         this.state = {
+            currentQuestion: 1,
+            maximumOrders: 0,
+            members: '',
             menu: [
                 { type: 'Soup', price: 2.5, checked: false },
                 { type: 'Wing(s)', price: .15, checked: false },
@@ -26,77 +31,74 @@ class MenuSelection extends Component {
                 { type: 'Soft Drink', price: 1.5, checked: false },
                 { type: 'Coffee', price: 1, checked: false }
             ],
-            position: ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eigth', 'ninth', 'tenth'],
             message: '',
-            members: '',
-            orders: 0
-
+            orderPrices: [],
+            orders: 0,
+            originalPricing: [],
+            position: ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eigth', 'ninth', 'tenth'],
+            totalOrdersMade: 0,
         }
     }
 
 
     componentWillReceiveProps(props) {
         if (props.attendingMembers !== undefined) {
+            var orginal_pricing = []
+            this.state.menu.forEach(element => {
+                orginal_pricing.push(element.price);
+            })
+
             this.setState({
-                members: props.attendingMembers
-            }, () => this.kidsOrdering())
+                members: props.attendingMembers,
+                orginalPricing: orginal_pricing,
+                maximumOrders: props.attendingMembers.kids + props.attendingMembers.teens + props.attendingMembers.adults + props.attendingMembers.seniors
+            }, () => {
+                // this.kidsOrdering();
+                console.log('State: ', this.state);
+                console.log('props: ', props);
+            })
         }
     }
 
     handleSubmit() {
+        console.log('-------------------------------------------');
         console.log('ORDERING');
+        var subtotal = 0;
+        // checking what user checked
+        this.state.menu.forEach((element, index) => {
+            if (element.checked) {
+                subtotal += element.price
+            }
+        })
+
+        this.setState({
+            orderPrices: [...this.state.orderPrices, subtotal],
+            currentQuestion: 2
+        }, () => {
+            this.defaultSetting();
+            console.log('order prices: ', this.state.orderPrices);
+            this.kidsOrdering()
+        })
+
+        console.log('-------------------------------------------');
     }
 
-    table() {
-        return (
-            <Table striped bordered condensed hover>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Menu Item</th>
-                        <th>Price</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Mark</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Jacob</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td colSpan="2">Larry the Bird</td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td colSpan="2">Larry the Bird</td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td colSpan="2">Larry the Bird</td>
-                    </tr>
-                    <tr>
-                        <td>6</td>
-                        <td colSpan="2">Larry the Bird</td>
-                    </tr>
-                    <tr>
-                        <td>7</td>
-                        <td colSpan="2">Larry the Bird</td>
-                    </tr>
-                    <tr>
-                        <td>8</td>
-                        <td colSpan="2">Larry the Bird</td>
-                    </tr>
-                    <tr>
-                        <td>9</td>
-                        <td colSpan="2">Larry the Bird</td>
-                    </tr>
-                </tbody>
-            </Table>
-        )
+    defaultSetting() {
+        var meniItems = [];
+        this.state.menu.forEach(element => {
+            meniItems.push(element)
+        });
+
+        meniItems.forEach((element, index) => {
+            element.price = this.state.originalPricing[index]
+            if (element.checked) {
+                element.checked = false
+            }
+        });
+
+        this.setState({
+            menu: meniItems
+        });
     }
 
     handleToggle() {
@@ -107,52 +109,54 @@ class MenuSelection extends Component {
         console.log('event: ', event.target)
     }
 
+    teensOrdering() {
+        console.log('-------------------------------------------');
+        console.log(`Teens Ordering`)
+        console.log('-------------------------------------------');
+    }
+
     kidsOrdering() {
         console.log('-------------------------------------------');
 
         const { kids, teens, adults, seniors } = this.state.members;
-        console.log(`kids: ${kids}`)
 
         var total_kids_ordered = 0;
-        if (kids > 0) {
+        var bool = this.state.currentQuestion <= kids;
+        console.log('bool: ', bool);
+        console.log(`current question: ${this.state.currentQuestion} and kids: ${kids}`)
+        if (kids > 0 && this.state.currentQuestion <= kids) {
             // change pricing
-            var original_pricing = [];
+            // var original_pricing = [];
             var all_menu_items = [];
 
             this.state.menu.forEach((x) => {
-                original_pricing.push(x.price);
+                // original_pricing.push(x.price);
                 all_menu_items.push(x);
             });
 
-            all_menu_items.forEach((x) => {
-                x.price = 0;
-            })
+            all_menu_items.forEach(x =>  x.price = 0)
 
             this.setState({
-                menu: all_menu_items
+                menu: all_menu_items,
+                // originalPricing: original_pricing
             });
             // --------------------------------------------------
+
+            const position = this.state.position[this.state.currentQuestion - 1];
+            this.setState({
+                message: `What will the ${position} kid order?`
+            }, () => this.handleSubmit());
 
             // for (let i = 0; i <= kids; i++) {
             //     console.log(i)
 
             // }
 
-            // DO NOT UNCOMMENT DO-WHILE LOOP 
-            // do {
-            //     // 
-            //     var position = this.state.position[total_kids_ordered]
-            //     this.setState({
-            //         message: `What will the ${position} kid order?`
-            //     }, () => {
-            //         total_kids_ordered++;
-            //     })
-
-            // } while (total_kids_ordered < kids);
+        } else {
+            this.teensOrdering();
         }
 
-
-
+        
         console.log('-------------------------------------------');
     }
 
@@ -161,11 +165,9 @@ class MenuSelection extends Component {
         var all_menu_items = [];
         this.state.menu.forEach(x => all_menu_items.push(x));
         all_menu_items[index].checked = !this.state.menu[index].checked;
-
         this.setState({
             menu: all_menu_items
-        }, () => console.log(this.state.menu))
-
+        }, () => console.log('menu: ', this.state.menu))
         console.log('-------------------------------------------');
     }
 
@@ -190,7 +192,7 @@ class MenuSelection extends Component {
                         {this.menuOptions()}
                     </FormControl>
                     <br />
-                    <Button type="submit" bsStyle='primary' onClick={this.handleSubmit}>ORDER</Button>
+                    <Button type="submit" bsStyle='primary' onClick={this.kidsOrdering}>ORDER</Button>
                 </FormGroup>
             </div>
         )
