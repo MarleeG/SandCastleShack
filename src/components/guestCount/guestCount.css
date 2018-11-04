@@ -1,0 +1,30 @@
+
+.alert-party{
+    top: 100px
+}
+.contentsOne{
+    background-image: linear-gradient(to bottom right, rgb(255, 0, 0, 0.5), rgb(255,192,203, 0.5));
+    position: relative;
+    top: 50px;
+    height: 220px;
+    border-radius: 50px;
+}
+
+.form{
+    top: 59px;
+}
+
+.questionOne{
+    font-family: 'Text Me One', sans-serif;
+    font-size: 30px;
+    top: 25px;
+}
+
+.submit-form-button{
+    top: 75px;
+}
+
+.alert-party, .form, .questionOne, .submit-form-button{
+    position: relative;
+}
+

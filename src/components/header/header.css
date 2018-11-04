@@ -1,0 +1,13 @@
+.header{
+    /* background-color: yellow; */
+    background-image: linear-gradient(to bottom right, #E85591, yellow, red);
+    height: 175px;
+}
+
+.header-title{
+    font-family: 'Abril Fatface', cursive;
+}
+
+.header-subtitle{
+    font-family: 'Dancing Script', cursive;
+}

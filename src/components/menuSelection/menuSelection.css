@@ -1,0 +1,24 @@
+.alert-message{
+    top: 20px;
+}
+
+.contentsThree{
+    background-image: linear-gradient(to bottom right, rgb(0, 0, 255, 0.5), rgb(255,192,203, 0.5));
+    top: 50px;
+    height: 220px;
+    border-radius: 50px;
+}
+
+.menuOptions{
+    height: 200px;
+}
+
+.questionThree{
+    font-family: 'Text Me One', sans-serif;
+    font-size: 30px;
+    top: 25px;
+}
+
+.alert-message, .contentsThree, .questionThree{
+    position: relative;
+}

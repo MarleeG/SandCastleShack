@@ -1,0 +1,15 @@
+.total-title{
+    font-family: 'Text Me One', sans-serif;
+    font-size: 30px;
+    top: 25px;
+}
+
+.total{
+    font-family: 'Text Me One', sans-serif;
+    top: 100px;
+    font-size: 80px;
+}
+
+.total, .total-title{
+    position: relative;
+}
