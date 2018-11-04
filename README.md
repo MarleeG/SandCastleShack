@@ -17,4 +17,4 @@ This web app allows users to order from a menu of items for each of their guests
 
 
 ## Deployed App
-* Sand Castle Shack - Coming soon
+* [Sand Castle Shack](https://sand-castle-shack.herokuapp.com/) - App
