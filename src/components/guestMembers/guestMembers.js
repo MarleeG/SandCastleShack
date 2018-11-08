@@ -119,7 +119,7 @@ class GuestMembers extends Component {
     alertUser() {
         return (
             <Alert bsStyle="warning" className='alert-party'>
-                <strong>Holy smokes!</strong> Values most be numbers and add up to <code>{this.props.totalAccountedGuests}</code>.
+                <strong>Holy smokes!</strong> Values must be numbers and add up to <code>{this.props.totalAccountedGuests}</code>.
             </Alert>
         )
     }
