@@ -130,7 +130,7 @@ class GuestMembers extends Component {
                 {this.props.appear ?
                     <div>
                         <h4 className='questionTwo'>
-                            Whose on your guest list?
+                            Who's on your guest list?
                         </h4>
                         <div className='contentsTwo'>
                             {this.form()}
